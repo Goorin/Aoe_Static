@@ -20,8 +20,19 @@ class Aoe_Static_CallController extends Mage_Core_Controller_Front_Action
         $response = array();
         $response['sid'] = Mage::getModel('core/session')->getEncryptedSessionId();
 
+        // Looks like this is unfinished work
         if ($currentProductId = $this->getRequest()->getParam('currentProductId')) {
             Mage::getSingleton('catalog/session')->setLastViewedProductId($currentProductId);
+        }
+
+        // Custom code to catch product id for product view page add to wishlist link
+        $currProdId = $this->getRequest()->getParam('atw_product_id');
+        if(isset($currProdId) && !is_null($currProdId)) {
+            $currProdId = intval($currProdId);
+            $product = Mage::getModel('catalog/product')->load($currProdId);
+            if(!Mage::registry('product')) {
+                Mage::register('product', $product);
+            }
         }
 
         $this->loadLayout();
