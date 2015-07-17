@@ -107,7 +107,7 @@ var Aoe_Static = {
                 var rel = $(this).attr('rel');
                 if (rel) {
                     data.getBlocks[id] = rel;
-                    if(rel = "addtowishlist") {
+                    if(rel === "addtowishlist") {
                         data.atw_product_id = g_aoestatic_prodid;
                     }
                     counter++;
