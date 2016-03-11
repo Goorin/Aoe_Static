@@ -13,6 +13,8 @@ class Aoe_Static_CallController extends Mage_Core_Controller_Front_Action
      *
      * @return void
      * @author Fabrizio Branca <fabrizio.branca@aoemedia.de>
+     *
+     * 2016-03-11 - Updated by Nick Rolando - Add action handle to layout load and register current product.
      */
     public function indexAction()
     {
@@ -20,22 +22,20 @@ class Aoe_Static_CallController extends Mage_Core_Controller_Front_Action
         $response = array();
         $response['sid'] = Mage::getModel('core/session')->getEncryptedSessionId();
 
-        // Looks like this is unfinished work
-        if ($currentProductId = $this->getRequest()->getParam('currentProductId')) {
+        $currentProductId = $this->getRequest()->getParam('currentProductId');
+        if (isset($currentProductId) && !is_null($currentProductId)) {
             Mage::getSingleton('catalog/session')->setLastViewedProductId($currentProductId);
-        }
-
-        // Custom code to catch product id for product view page add to wishlist link
-        $currProdId = $this->getRequest()->getParam('atw_product_id');
-        if(isset($currProdId) && !is_null($currProdId)) {
-            $currProdId = intval($currProdId);
-            $product = Mage::getModel('catalog/product')->load($currProdId);
+            $currentProductId = intval($currentProductId);
+            $product = Mage::getModel('catalog/product')->load($currentProductId);
             if(!Mage::registry('product')) {
                 Mage::register('product', $product);
             }
         }
 
-        $this->loadLayout();
+        // Get action handle
+        $actionHandle = $this->getRequest()->getParam('fullActionName');
+
+        $this->loadLayout($actionHandle);
         $layout = $this->getLayout();
 
         $requestedBlockNames = $this->getRequest()->getParam('getBlocks');

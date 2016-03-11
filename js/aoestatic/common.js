@@ -107,9 +107,6 @@ var Aoe_Static = {
                 var rel = $(this).attr('rel');
                 if (rel) {
                     data.getBlocks[id] = rel;
-                    if(rel === "addtowishlist") {
-                        data.atw_product_id = g_aoestatic_prodid;
-                    }
                     counter++;
                 } else {
                     // console.log(this);
@@ -118,11 +115,13 @@ var Aoe_Static = {
             });
 
             // add current product
-            /* This needs some serious refactoring anyways...
-            if (typeof currentproductid !== 'undefined' && currentproductid) {
-                data.currentProductId = currentproductid;
+            // Uncommented and updated by Nick Rolando
+            if (typeof Aoe_Static.currentProductId !== 'undefined' && Aoe_Static.currentProductId) {
+                data.currentProductId = Aoe_Static.currentProductId;
             }
-            */
+            if (typeof Aoe_Static.fullActionName !== 'undefined' && Aoe_Static.fullActionName) {
+                data.fullActionName = Aoe_Static.fullActionName;
+            }
 
             // E.T. phone home
             if (typeof data.currentProductId !== 'undefined' || counter > 0) {
